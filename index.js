@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer";
+import fs from "fs";
 
 puppeteer
   .launch({
@@ -17,17 +18,45 @@ puppeteer
       postItems = [];
       posts.forEach((post) => {
         let title = post.querySelector("h3").innerText;
-        postItems.push({ title: title });
+        // let votes = post.querySelectorAll("div > span").innerText;
+        let description = "";
+
+        try {
+          description = post.querySelector("p").innerText;
+        } catch (err) {}
+
+        postItems.push({
+          title: title,
+          // votes: votes,
+          description: description,
+        });
       });
 
-      var items = {
-        posts: postItems,
-      };
-
-      return items;
+      return postItems;
     });
 
-    console.log(rposts);
+    let csvContent = rposts
+      .map((element) => {
+        return Object.values(element)
+          .map((item) => `"${item}"`)
+          .join(",");
+      })
+      .join("\n");
+
+    fs.writeFile(
+      "reddit_posts.csv",
+      "Title, Description" + "\n" + csvContent,
+      "utf8",
+      function (err) {
+        if (err) {
+          console.log(
+            "Some error occurred - file either not saved or corrupted."
+          );
+        } else {
+          console.log("File has been saved!");
+        }
+      }
+    );
 
     await browser.close();
   })
