@@ -6,5 +6,6 @@ It then takes the title and decription of each post and at the end, saves it in 
 
 `
 yarn
+
 node index.js
 `
