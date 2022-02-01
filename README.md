@@ -4,8 +4,7 @@ This is a node script that uses puppetter and loads the url (listed at top of sc
 
 It then takes the title and decription of each post and at the end, saves it in a spreadsheet. 
 
-`
+```
 yarn
-
 node index.js
-`
+```
